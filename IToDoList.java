@@ -1,3 +1,7 @@
+package edu.ucalgary.oop;
+
+import java.util.Objects;
+
 public interface IToDoList {
     // Method to add a new task
     void addTask(String task);
