@@ -21,8 +21,9 @@ public class ToDoList {
     public void completeTask(String id) {
         Task task = findTaskById(id);
         if (task != null) {
-            task.setCompleted(true);
-            undoStack.push(() -> task.setCompleted(false));
+            boolean oldComplete = task.isComplete;
+            task.isComplete = true;
+            undoStack.push(() -> task.isComplete = oldComplete);
         }
     }
 
@@ -34,16 +35,16 @@ public class ToDoList {
         }
     }
 
-    public void editTask(String id, String newTitle, boolean isCompleted) {
+    public void editTask(String id, String newTitle, boolean isComplete) {
         Task task = findTaskById(id);
         if (task != null) {
-            String oldTitle = task.getTitle();
-            boolean oldCompleted = task.isCompleted();
-            task.setTitle(newTitle);
-            task.setCompleted(isCompleted);
+            String oldTitle = task.title;
+            boolean oldCompleted = task.isComplete;
+            task.title = newTitle;
+            task.isComplete = isComplete;
             undoStack.push(() -> {
-                task.setTitle(oldTitle);
-                task.setCompleted(oldCompleted);
+                task.title = oldTitle;
+                task.isComplete = oldCompleted;
             });
         }
     }
@@ -60,8 +61,8 @@ public class ToDoList {
 
     private Task findTaskById(String id) {
         return tasks.stream()
-                .filter(task -> task.getId().equals(id))
+                .filter(task -> task.id.equals(id))
                 .findFirst()
                 .orElse(null);
-    }
+}
 }
